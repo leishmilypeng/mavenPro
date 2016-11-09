@@ -1,0 +1,27 @@
+连接池选择  
+DBCP、C3P0、Proxool 、 BoneCP开源连接池的比较
+http://blog.csdn.net/july_2/article/details/18843419
+
+1 dbcp
+dbcp可能是使用最多的开源连接池，原因大概是因为配置方便，而且很多开源和tomcat应用例子都是使用的这个连接池吧。这个连接池可以设置最大和最小连接，连接等待时间等，基本功能都有。这个连接池的配置参见附件压缩包中的:dbcp.xml
+使用评价：在具体项目应用中，发现此连接池的持续运行的稳定性还是可以，不过速度稍慢，在大并发量的压力下稳定性有所下降，此外不提供连接池监控
+
+2 c3p0
+c3p0是另外一个开源的连接池，在业界也是比较有名的，这个连接池可以设置最大和最小连接，连接等待时间等，基本功能都有。这个连接池的配置参见附件压缩包中的:c3p0.xml。
+使用评价：在具体项目应用中，发现此连接池的持续运行的稳定性相当不错，在大并发量的压力下稳定性也有一定保证，          此外不提供连接池监控。
+
+3 BoneCP
+相比前两者具备相应的功能，在多并发情况下效率相对高点（本框架采用的就是这种类型）
+
+#jquery datatable doc
+http://legacy.datatables.net/ref
+
+#jquery extensions
+https://datatables.net/extensions/
+
+
+
+#maven repository
+http://mvnrepository.com/
+
+#ehcache memcache redis比较

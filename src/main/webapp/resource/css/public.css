@@ -1,0 +1,21 @@
+table tr.row_selected {
+	background-color: #B0BED9 !important;
+}
+
+div .queryBox {
+	width: 100%;
+	
+}
+
+
+table td.center{
+	text-align:center;	
+}
+
+table td.left{
+	text-align:left;	
+}
+
+table td.right{
+	text-align:right;	
+}

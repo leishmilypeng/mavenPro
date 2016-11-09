@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd" default-lazy-init="false">
+	<!-- 
+	实现定时任务
+	1.采用配置的方式
+	2.采用数据库配置实现可调整的定时调度任务
+	 -->
+	 
+ 	<!-- 配置调度程序quartz ，其中配置JobDetail有两种方式 -->
+    <!-- 方式一：使用JobDetailBean，任务类必须实现Job接口 -->   
+    <!-- 
+    <bean id="myjob" class="org.springframework.scheduling.quartz.QuartzJobBean">  
+	    <property name="name" value="exampleJob"></property>  
+	    <property name="jobClass" value="com.ncs.hj.SpringQtz"></property> 
+	    <property name="jobDataAsMap">
+			<map>
+				<entry key="service"><value>simple is the beat</value></entry>
+			</map>
+		</property>
+    </bean> 
+     -->
+        <!--运行时请将方式一注释掉！ -->  
+        <!-- 方式二：使用MethodInvokingJobDetailFactoryBean，任务类可以不实现Job接口，通过targetMethod指定调用方法-->  
+        <!-- 定义目标bean和bean中的方法 -->
+        <bean id="SpringQtzJob" class="com.lp.biz.task.SpringScheduleTask"/>
+        
+        <bean id="SpringQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="SpringQtzJob"/>
+        </property>
+        <property name="targetMethod">  <!-- 要执行的方法名称 -->
+            <value>execute</value>
+        </property>
+    </bean>
+
+    <!-- ======================== 调度触发器 ======================== -->
+    <bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="SpringQtzJobMethod"></property>
+        <property name="cronExpression" value="0/10 * * * * ?"></property>
+    </bean>
+
+    <!-- ======================== 调度工厂 ======================== -->
+    <bean id="springJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" lazy-init="false">
+        <property name="triggers">
+            <list>
+            	<!-- 采用动态配置的方式进行定时任务的添加 -->
+            	<!-- 
+                <ref bean="CronTriggerBean"/>
+                 -->
+            </list>
+        </property>
+    </bean>  
+
+	<!-- 
+		项目中的应用可以通过以上方式配置定时任务，但想修改定时任务就需要重启服务器，对于不能停机的应用这种方式就显得不太方便 
+		可以使用spring配合quartz 实现动态改变定时任务
+	-->
+
+	
+	
+</beans>
