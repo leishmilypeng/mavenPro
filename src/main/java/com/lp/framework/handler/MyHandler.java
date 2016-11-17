@@ -16,9 +16,8 @@ public class MyHandler implements WebSocketHandler {
 	
 	private static final Logger logger = Logger.getLogger(MyHandler.class);
 
-	private static final ArrayList<WebSocketSession> users = new ArrayList<>();
+	private static final ArrayList<WebSocketSession> users = new ArrayList<WebSocketSession>();
 
-	@Override
 	public void afterConnectionClosed(WebSocketSession webSocketSession, CloseStatus closeStatus)
 			throws Exception {
 		// TODO Auto-generated method stub
@@ -26,7 +25,6 @@ public class MyHandler implements WebSocketHandler {
 	     users.remove(webSocketSession);
 	}
 
-	@Override
 	public void afterConnectionEstablished(WebSocketSession session)
 			throws Exception {
 		// TODO Auto-generated method stub
@@ -40,14 +38,12 @@ public class MyHandler implements WebSocketHandler {
         }
 	}
 
-	@Override
 	public void handleMessage(WebSocketSession webSocketSession, WebSocketMessage<?> webSocketMessage)
 			throws Exception {
 		// TODO Auto-generated method stub
 		sendMessageToUsers(new TextMessage(webSocketMessage.getPayload() + ""));
 	}
 
-	@Override
 	public void handleTransportError(WebSocketSession webSocketSession, Throwable arg1)
 			throws Exception {
 		// TODO Auto-generated method stub
@@ -58,7 +54,7 @@ public class MyHandler implements WebSocketHandler {
         users.remove(webSocketSession);
 	}
 
-	@Override
+
 	public boolean supportsPartialMessages() {
 		// TODO Auto-generated method stub
 		return false;

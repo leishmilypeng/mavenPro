@@ -314,7 +314,12 @@
 				
 		
 		<!-- redis集成 -->
-		
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>1.0.2.RELEASE</version>
+		</dependency>
+
 		<dependency>
 		    <groupId>redis.clients</groupId>
 		    <artifactId>jedis</artifactId>
@@ -328,8 +333,13 @@
 		    <artifactId>commons-pool2</artifactId>
 		    <version>2.4.2</version>
 		</dependency>
-		
-				
+
+		<!--jbpm6.5-->
+		<dependency>
+			<groupId>org.jbpm</groupId>
+			<artifactId>jbpm-test</artifactId>
+			<version>6.5.0.Final</version>
+		</dependency>
 	</dependencies>
 	
 	<build>

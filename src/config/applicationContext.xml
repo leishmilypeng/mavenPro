@@ -160,6 +160,8 @@
 	<!-- 后续进行aop aspect的测试 -->
 	
 	<!-- 导入schedule的配置，定时任务配置 -->
-	<import resource="scheduler-config.xml"/>		
+	<import resource="scheduler-config.xml"/>
+    <!-- 导入redis的配置 -->
+    <import resource="redis-config.xml"/>
 	
 </beans>
