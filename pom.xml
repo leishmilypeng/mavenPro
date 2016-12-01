@@ -314,10 +314,11 @@
 				
 		
 		<!-- redis集成 -->
+		<!--1.0.2.RELEASE  先前采用的是低版本，绘到底报错，   java.lang.NoClassDefFoundError: org/apache/commons/pool/impl/GenericObjectPool$Config  -->
 		<dependency>
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-redis</artifactId>
-			<version>1.0.2.RELEASE</version>
+			<version>1.6.1.RELEASE</version>
 		</dependency>
 
 		<dependency>

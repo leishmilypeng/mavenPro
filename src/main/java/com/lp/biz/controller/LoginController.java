@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.lp.common.service.IRedisService;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -35,6 +36,9 @@ public class LoginController {
 	
 	@Autowired
 	private CacheManager cacheManager;
+
+	@Autowired
+	private IRedisService redisService;
 	
     @RequestMapping(value="/index.do")
     public ModelAndView index(HttpServletRequest request,HttpServletResponse response){
@@ -52,8 +56,12 @@ public class LoginController {
         Map<String,Object> cond = new HashMap<String,Object>();
         List<TmUser> userList = this.userService.getList(cond);
         request.setAttribute("userList", userList);
-        
-        return mv;
+
+		redisService.set("hello","word");
+		String redisKey = redisService.get("hello");
+		System.out.println("==========redis value:"+redisKey+",======");
+
+		return mv;
     }
     
     @RequestMapping(value="/ajaxUserList.do")

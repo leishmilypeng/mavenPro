@@ -2,13 +2,10 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
        xmlns:context="http://www.springframework.org/schema/context"
-       xmlns:jee="http://www.springframework.org/schema/jee" xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="
             http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-    <context:property-placeholder location="classpath:redis.properties" />
 
     <bean id="poolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxTotal" value="100000" />
@@ -18,11 +15,23 @@
         <property name="testOnReturn" value="false" />
     </bean>
 
-    <bean id="connectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" p:hostName="${redis.host}"
-          p:port="${redis.port}"  p:poolConfig-ref="poolConfig"/>
+    <bean id="jedisConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          destroy-method="destroy">
+        <property name="hostName" value="${redis.host}" />
+        <property name="port" value="${redis.port}" />
+        <property name="poolConfig" ref="poolConfig" />
+        <property name="database" value="0"/>
+    </bean>
+
 
     <bean id="redisTemplate" class="org.springframework.data.redis.core.StringRedisTemplate">
-        <property name="connectionFactory"   ref="connectionFactory" />
+        <property name="connectionFactory"   ref="jedisConnectionFactory" />
+    </bean>
+
+    <bean id="redisService" class="com.lp.common.service.impl.RedisServiceImpl">
+        <property name="redisTemplate" ref="redisTemplate"/>
+        <property name="expire" value="86400" /><!--默认超时时间 24小时-->
     </bean>
 
 </beans>
