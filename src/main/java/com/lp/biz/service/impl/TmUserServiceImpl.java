@@ -38,7 +38,6 @@ public class TmUserServiceImpl extends BaseServiceImpl<TmUser> implements ITmUse
 		return new TmUserDao();
 	}
 	
-	@Override
 	public void test() {
 		//System.out.println("通过注解调用接口成功！");
 		
@@ -92,7 +91,6 @@ public class TmUserServiceImpl extends BaseServiceImpl<TmUser> implements ITmUse
 	 *  @Caching(evict = { @CacheEvict("primary"), @CacheEvict(cacheNames="secondary", key="#p0") })
 	 */
 	@Cacheable(value = "myCache", key = "'testUserCache'")
-	@Override
 	public List<TmUser> testUserCache()
 	{
 		System.out.println("select from db");
