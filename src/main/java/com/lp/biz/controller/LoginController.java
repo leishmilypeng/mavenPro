@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.lp.common.service.IRedisService;
+import com.lp.test.aop.Sleepable;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
@@ -60,6 +61,10 @@ public class LoginController {
 		redisService.set("hello","word");
 		String redisKey = redisService.get("hello");
 		System.out.println("==========redis value:"+redisKey+",======");
+
+		// spring切面
+		Sleepable sleep = (Sleepable)SpringContextHolder.getBean("lina");
+		sleep.beginsleep();
 
 		return mv;
     }

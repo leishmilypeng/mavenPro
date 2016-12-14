@@ -1,4 +1,4 @@
-package com.lp.framework.filter;
+package com.lp.framework.intercepter;
 
 import java.util.Map;
 
@@ -12,14 +12,12 @@ import org.springframework.web.socket.WebSocketHandler;
 public class HandshakeInterceptor implements
 		org.springframework.web.socket.server.HandshakeInterceptor {
 
-	@Override
 	public void afterHandshake(ServerHttpRequest arg0, ServerHttpResponse arg1,
 			WebSocketHandler arg2, Exception arg3) {
 		// TODO Auto-generated method stub
 
 	}
 
-	@Override
 	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
 		// TODO Auto-generated method stub
 		if (request instanceof ServletServerHttpRequest) {

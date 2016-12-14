@@ -27,7 +27,7 @@ public class HelloWorldTest {
 		InvocationHandler handler = new ProxyHandler(userService);
 		
 		ITmUserService proxy = (ITmUserService) Proxy.newProxyInstance(userService.getClass().getClassLoader(), userService.getClass().getInterfaces(), handler);
-		List list = proxy.getList(new HashMap<String,Object>());
+		//List list = proxy.getList(new HashMap<String,Object>());
 		System.out.println("");
 	}
 }

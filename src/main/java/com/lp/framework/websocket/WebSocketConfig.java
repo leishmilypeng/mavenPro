@@ -9,7 +9,7 @@ import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 
-import com.lp.framework.filter.HandshakeInterceptor;
+import com.lp.framework.intercepter.HandshakeInterceptor;
 import com.lp.framework.handler.MyHandler;
 
 @Configuration
@@ -17,16 +17,9 @@ import com.lp.framework.handler.MyHandler;
 @EnableWebSocket	//开启websocket
 public class WebSocketConfig implements WebSocketConfigurer  {
 
-	@Override
-	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-		// TODO Auto-generated method stub
-		registry.addHandler(myHandler(),"/myHandler").addInterceptors(new HandshakeInterceptor());   //支持websocket 的访问链接
-        //registry.addHandler(new MyHandler(),"/sockjs/echo").addInterceptors(new HandshakeInterceptor()).withSockJS(); //不支持websocket的访问链接
-	}
-	
-	@Bean
-    public WebSocketHandler myHandler() {
-        return new MyHandler();
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(new MyHandler(),"/echo").addInterceptors(new HandshakeInterceptor()); //支持websocket 的访问链接
+        registry.addHandler(new MyHandler(),"/sockjs/echo").addInterceptors(new HandshakeInterceptor()).withSockJS(); //不支持websocket的访问链接
     }
 	
 	/*
