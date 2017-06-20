@@ -2,21 +2,19 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:tx="http://www.springframework.org/schema/tx"
-    xmlns:aop="http://www.springframework.org/schema/aop"
     xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:jpa="http://www.springframework.org/schema/data/jpa" 
     xmlns:cache="http://www.springframework.org/schema/cache"
-    xmlns:p="http://www.springframework.org/schema/p"  
+    xmlns:aop="http://www.springframework.org/schema/aop"
     xmlns:websocket="http://www.springframework.org/schema/websocket"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.1.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.1.xsd
-        http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd
         http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache-4.1.xsd
+        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd
-        "        
+        "
         default-lazy-init="true">
     
 		<bean id="propertyConfigurer"
@@ -25,15 +23,17 @@
 				<list>
 					<value>classpath:jdbc.properties</value>
 					<value>classpath:config.properties</value>
+					<value>classpath:redis.properties</value>
 				</list>
 			</property>
 		</bean>
 	
 	     <!-- 注解支持 -->
         <context:annotation-config />
-        
-        
-        
+
+        <!--自动扫描aspectj注解-->
+        <aop:aspectj-autoproxy />
+
         <!-- 启动组件扫描，排除@Controller组件（Controller注解已经在applicationContext-servlet.xml文件里面进行注解），该组件由SpringMVC配置文件扫描 -->
         <context:component-scan base-package="com.lp">
             <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>  
@@ -45,9 +45,6 @@
     	<bean id="systemStartupInit" class="com.lp.init.SystemStartupInit" init-method="init" lazy-init="false"></bean>
     	
     
-        <!-- 属性文件位置 -->
-        <!-- <context:property-placeholder location="classpath:jdbc.properties" />  -->
-        
         <!-- 数据源 -->
         <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
             <!-- 数据库驱动 -->
@@ -58,29 +55,21 @@
             <property name="user" value="${db.user}" />
             <!-- 数据库的密码 -->
             <property name="password" value="${db.password}" />
-            
             <!-- 连接池属性配置 -->
             <!-- 检查数据库连接池中空闲连接的间隔时间，单位是分，默认值：240，如果要取消则设置为0 -->  
-	        <property name="idleConnectionTestPeriod" value="${db.idleConnectionTestPeriod}" />  
-	
+	        <property name="idleConnectionTestPeriod" value="${db.idleConnectionTestPeriod}" />
 	        <!-- 连接池中未使用的链接最大存活时间，单位是分，默认值：60，如果要永远存活设置为0 -->  
-	        <property name="idleMaxAge" value="${db.idleMaxAge}" />  
-	
+	        <property name="idleMaxAge" value="${db.idleMaxAge}" />
 	        <!-- 每个分区最大的连接数 -->  
-	        <property name="maxConnectionsPerPartition" value="${db.maxConnectionsPerPartition}" />  
-	
+	        <property name="maxConnectionsPerPartition" value="${db.maxConnectionsPerPartition}" />
 	        <!-- 每个分区最小的连接数 -->  
-	        <property name="minConnectionsPerPartition" value="${db.minConnectionsPerPartition}" />  
-	
+	        <property name="minConnectionsPerPartition" value="${db.minConnectionsPerPartition}" />
 	        <!-- 分区数 ，默认值2，最小1，推荐3-4，视应用而定-->  
-	        <property name="partitionCount" value="${db.partitionCount}" />  
-	
+	        <property name="partitionCount" value="${db.partitionCount}" />
 	        <!-- 每次去拿数据库连接的时候一次性要拿几个,默认值：2 -->  
-	        <property name="acquireIncrement" value="${db.acquireIncrement}" />  
-	
+	        <property name="acquireIncrement" value="${db.acquireIncrement}" />
 	        <!-- 缓存prepared statements的大小，默认值：0 -->  
-	        <property name="statementsCacheSize" value="${db.statementsCacheSize}" />  
-	
+	        <property name="statementsCacheSize" value="${db.statementsCacheSize}" />
 	        <!-- 每个分区释放链接助理进程的数量，默认值：3，除非你的一个数据库连接的时间内做了很多工作，不然过多的助理进程会影响你的性能 -->  
 	        <property name="releaseHelperThreads" value="${db.releaseHelperThreads}" />  
        </bean>
@@ -160,6 +149,39 @@
 	<!-- 后续进行aop aspect的测试 -->
 	
 	<!-- 导入schedule的配置，定时任务配置 -->
-	<import resource="scheduler-config.xml"/>		
-	
+	<import resource="scheduler-config.xml"/>
+    <!-- 导入redis的配置 -->
+   <!-- <import resource="redis-config.xml"/>-->
+
+    <!--    一、基于代理的AOP  -->
+    <!-- 创建一个增强 advice -->
+    <bean id ="sleepHelper" class="com.lp.test.aop.SleepHelper"/>
+
+    <bean id="lina" class="com.lp.test.aop.SleepImpl"/>
+    <!-- 定义切点  匹配所有的sleep方法-->
+    <bean id ="sleepPointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut">
+        <property name="pattern" value=".*sleep"></property>
+    </bean>
+
+    <!-- 切面  增强+切点结合 -->
+    <bean id="sleepHelperAdvisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+        <property name="advice" ref="sleepHelper"/>
+        <property name="pointcut" ref="sleepPointcut"/>
+    </bean>
+    <!-- 定义代理对象 -->
+    <!--
+    <bean id="linaProxy" class="org.springframework.aop.framework.ProxyFactoryBean">
+        <property name="target" ref="lina"/>
+        <property name="interceptorNames" value="sleepHelperAdvisor"/>
+    </bean>
+    -->
+    <bean id="websocket" class="com.lp.framework.handler.WebsocketEndPoint"/>
+
+    <websocket:handlers>
+        <websocket:mapping path="/websocket" handler="websocket"/>
+        <websocket:handshake-interceptors>
+            <bean class="com.lp.framework.intercepter.HandshakeInterceptor"/>
+        </websocket:handshake-interceptors>
+    </websocket:handlers>
+
 </beans>

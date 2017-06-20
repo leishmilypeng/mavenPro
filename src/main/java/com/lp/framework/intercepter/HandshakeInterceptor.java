@@ -1,36 +1,29 @@
 package com.lp.framework.intercepter;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpSession;
-
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor;
 
-public class HandshakeInterceptor implements
-		org.springframework.web.socket.server.HandshakeInterceptor {
+import java.util.Map;
 
-	public void afterHandshake(ServerHttpRequest arg0, ServerHttpResponse arg1,
-			WebSocketHandler arg2, Exception arg3) {
-		// TODO Auto-generated method stub
+/**
+ * Created by CPR161 on 2017-04-28.
+ */
+public class HandshakeInterceptor extends HttpSessionHandshakeInterceptor {
+    @Override
+    public boolean beforeHandshake(ServerHttpRequest request,
+                                   ServerHttpResponse response, WebSocketHandler wsHandler,
+                                   Map<String, Object> attributes) throws Exception {
+        System.out.println("Before Handshake");
+        return super.beforeHandshake(request, response, wsHandler, attributes);
+    }
 
-	}
-
-	public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse serverHttpResponse, WebSocketHandler webSocketHandler, Map<String, Object> map) throws Exception {
-		// TODO Auto-generated method stub
-		if (request instanceof ServletServerHttpRequest) {
-            ServletServerHttpRequest servletRequest = (ServletServerHttpRequest) request;
-            HttpSession session = servletRequest.getServletRequest().getSession(false);
-            String userName = "xq";
-            if (session != null) {
-                //使用userName区分WebSocketHandler，以便定向发送消息
-//                String userName = (String) session.getAttribute("WEBSOCKET_USERNAME");
-                map.put("WEBSOCKET_USERNAME",userName);
-            }
-        }
-		return false;
-	}
-
+    @Override
+    public void afterHandshake(ServerHttpRequest request,
+                               ServerHttpResponse response, WebSocketHandler wsHandler,
+                               Exception ex) {
+        System.out.println("After Handshake");
+        super.afterHandshake(request, response, wsHandler, ex);
+    }
 }

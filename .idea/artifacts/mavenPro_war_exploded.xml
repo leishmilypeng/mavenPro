@@ -109,8 +109,8 @@
           <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-ws-addr:2.7.18" />
           <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-ws-policy:2.7.18" />
           <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-databinding-jaxb:2.7.18" />
-          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-impl:2.2.6" />
-          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-xjc:2.2.6" />
+          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-impl:2.1.13" />
+          <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-xjc:2.1.13" />
           <element id="library" level="project" name="Maven: com.sun.xml.bind:jaxb-core:2.2.11" />
           <element id="library" level="project" name="Maven: org.apache.cxf:cxf-rt-transports-http:2.7.18" />
           <element id="library" level="project" name="Maven: wsdl4j:wsdl4j:1.6.3" />
@@ -129,6 +129,7 @@
           <element id="library" level="project" name="Maven: org.javassist:javassist:3.18.1-GA" />
           <element id="library" level="project" name="Maven: org.jboss.spec.javax.transaction:jboss-transaction-api_1.1_spec:1.0.1.Final" />
           <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.10.1" />
+          <element id="library" level="project" name="Maven: net.coobird:thumbnailator:0.4.8" />
         </element>
       </element>
       <element id="directory" name="META-INF">

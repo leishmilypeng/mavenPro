@@ -57,10 +57,12 @@ public class LoginController {
         Map<String,Object> cond = new HashMap<String,Object>();
         List<TmUser> userList = this.userService.getList(cond);
         request.setAttribute("userList", userList);
+/*
 
 		redisService.set("hello","word");
 		String redisKey = redisService.get("hello");
 		System.out.println("==========redis value:"+redisKey+",======");
+*/
 
 		// spring切面
 		Sleepable sleep = (Sleepable)SpringContextHolder.getBean("lina");
