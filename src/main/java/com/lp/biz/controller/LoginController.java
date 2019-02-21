@@ -78,11 +78,11 @@ public class LoginController {
         Map<String,Object> cond = new HashMap<String,Object>();
         
         Map<String,Object> aoData = Pager.getAoDataMap(request.getParameter("aoData"));
-        
+        /*
         int iDisplayStart = Integer.valueOf(aoData.get("iDisplayStart").toString());
         int iDisplayLength = Integer.valueOf(aoData.get("iDisplayLength").toString());
-        
-        List<TmUser> list = userService.getList(cond,iDisplayStart,iDisplayLength);
+        */
+        List<TmUser> list = userService.getList(cond,0,100);
         int count = userService.getListCount(cond);
 		returnMap.put("aaData", list);
 		returnMap.put("iTotalRecords", count);

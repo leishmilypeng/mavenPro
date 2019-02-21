@@ -64,7 +64,7 @@
         colReorder: true,		// 用于固定表头
         fixedHeader: true,
        // "sScrollY": "300px",
-       "bServerSide" : true,			// Configure DataTables to use server-side processing
+       "bServerSide" : false,			// Configure DataTables to use server-side processing
         "sAjaxSource": "${ctx}/login/ajaxUserList.do",	
         "fnServerData": function ( sSource, aoData, fnCallback ) {
 				 $.ajax( {
@@ -141,7 +141,7 @@
 	$(document).off("click", "#query_user_list");
 	$(document).on("click", "#query_user_list", function(){
 		if(user_list_table != null){
-			user_list_table.fnDraw(false);
+			user_list_table.fnDraw(true);
 		}
 	});
 	
