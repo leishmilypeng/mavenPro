@@ -10,7 +10,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 public class SpringScheduleTask extends QuartzJobBean {
 
 	public void execute(){
-		System.out.println("启动定时任务！");
+		System.out.println("启动定时任务！"+ System.currentTimeMillis());
 	}
 
 	@Override
